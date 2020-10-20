@@ -13,29 +13,32 @@ from scipy.integrate import quad
 from copy import deepcopy
 
 indentity = np.identity(3)
-L = np.array([1,0,0])
+L = np.array([1, 0, 0])
 X = indentity
 I = indentity
 
-def omega (X, I, L):
-  return np.dot(np.linalg.inv((np.dot(X, I))), L)
 
-def dX (X, omega_i):
-  Omega = np.matrix([[0, -omega_i[2], omega_i[1]],
-                    [omega_i[2], 0, -omega_i[0]],
-                    [-omega_i[1], omega_i[0], 0]])
-  return np.dot(X, Omega)
+def omega(X, I, L):
+    return np.dot(np.linalg.inv((np.dot(X, I))), L)
+
+
+def dX(X, omega_i):
+    Omega = np.matrix([[0, -omega_i[2], omega_i[1]],
+                       [omega_i[2], 0, -omega_i[0]],
+                       [-omega_i[1], omega_i[0], 0]])
+    return np.dot(X, Omega)
 
 # Antar at dX kun har reele verdier
-def integrate (dX, t):
-  X_t = deepcopy(dX)
-  for row in X_t:
-    for index in row:
-      index *= t
-  return X_t
+
+
+def integrate(dX, t):
+    X_t = deepcopy(dX)
+    for row in X_t:
+        for index in row:
+            index *= t
+    return X_t
+
 
 omega_i = omega(X, I, L)
 dX_t = dX(X, omega_i)
 X = integrate(dX_t, 2)
-print(dX_t)
-print(X)

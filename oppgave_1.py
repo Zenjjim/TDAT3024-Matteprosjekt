@@ -14,39 +14,48 @@ x = 1
 y = 2
 z = 3
 
-Omega = np.array([[0,-z,y],[z,0,-x],[-y,x,0]])
+Omega = np.array([[0, -z, y], [z, 0, -x], [-y, x, 0]])
 
-def I :
 
-def E(Omega, h) :
-  I = np.identity(Omega.shape[0])
-  omega = np.sqrt(Omega[0][1]**2+Omega[0][2]**2+Omega[1][2]**2)
+def I():
+    return 0
 
-  return I + (1-np.cos(h*omega))*(Omega/omega)**2 + np.sin(h*omega)*(Omega/omega)
 
-h = 0
-E(Omega, h).transpose()*E(Omega, h)
+def E(Omega, h):
+    I = np.identity(Omega.shape[0])
+    omega = np.sqrt(Omega[0][1]**2+Omega[0][2]**2+Omega[1][2]**2)
+    return I + (1-np.cos(omega*h))*(np.matmul(Omega, Omega)/(omega*omega)) + np.sin(omega*h)*(Omega/omega)
+
+
+h = 4
+print(np.matmul(E(Omega, h).transpose(), E(Omega, h)))
 
 """Oppgave 1b"""
 
-def Erot(I, rotVek) :
-  L = np.dot(I, rotVek)
-  return (1/2)*np.dot(L, rotVek)
 
-rotVek = np.array([1,1,1])
+def Erot(I, rotVek):
+    L = np.dot(I, rotVek)
+    return (1/2)*np.dot(L, rotVek)
+
+
+rotVek = np.array([1, 1, 1])
 I = 3
 Erot(I, rotVek)
 
 """Oppgave 1c"""
 
+
 def Ixx():
-  return ((M_1*R_2**2)/4) + ((M_1*L_1**2)/12) + ((M_2*R_2**2)/2)
+    return ((M_1*R_2**2)/4) + ((M_1*L_1**2)/12) + ((M_2*R_2**2)/2)
+
 
 def Iyy():
-  return (M_1*R_1**2) + ((M_2*L_2)/4) + ((M_1*R_1**2)/2) + ((M_2*R_2**2)/4) + ((M_2L_2**2)/12)
+    return (M_1*R_1**2) + ((M_2*L_2)/4) + ((M_1*R_1**2)/2) + ((M_2*R_2**2)/4) + ((M_2L_2**2)/12)
+
 
 def Izz():
     return (M_1*R_1**2) + ((M_2*L_2)/4) + ((M_1*R_1**2)/4) + ((M_1L_1**2)/12) + ((M_2*R_2**2)/4) + ((M_2L_2**2)/12)
+
 
 L_1 = 0.08
 R_1 = 0.01
@@ -63,10 +72,12 @@ M_2 = 253.0/2
 
 Ixx = M_1*(R_1**2)/4 + M_1*(L_1**2)/12 + M_2*(R_2**2)/2
 
-Iyy = M_1*(R_1**2) + M_2*L_2/4 + M_1*(R_1**2)/2 + M_2*(R_2**2)/4 + M_2*(L_2**2)/12
+Iyy = M_1*(R_1**2) + M_2*L_2/4 + M_1*(R_1**2) / \
+    2 + M_2*(R_2**2)/4 + M_2*(L_2**2)/12
 
-Izz = M_1*(R_1**2) + M_2*L_2/4 + M_1*(R_1**2)/4 + M_1*(L_1**2)/12 + M_2*(R_2**2)/4 + M_2*(L_2**2)/12
+Izz = M_1*(R_1**2) + M_2*L_2/4 + M_1*(R_1**2)/4 + M_1 * \
+    (L_1**2)/12 + M_2*(R_2**2)/4 + M_2*(L_2**2)/12
 
-print(Ixx)
-print(Iyy)
-print(Izz)
+# print(Ixx)
+# print(Iyy)
+# print(Izz)

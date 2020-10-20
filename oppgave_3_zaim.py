@@ -9,41 +9,52 @@ Original file is located at
 
 # Implementer varianten av Eulers metode gitt i likning (6) i avnsitt 4.1. Og test metoden p ̊a systemet som best ̊ar av likningene (3) og (4)._
 import numpy as np
-
-# Copy+Paste from oppgave 1
-def exp(Omega, h) :
-  I = np.identity(Omega.shape[0])
-  omega = np.sqrt(Omega[0][1]**2+Omega[0][2]**2+Omega[1][2]**2)
-
-  return I + (1-np.cos(h*omega))*(Omega/omega)**2 + np.sin(h*omega)*(Omega/omega)
-
+from oppgave_2 import omega, dX, integrate
+from oppgave_1 import E
 # I er treghetsmoment, W_i resultatene og L er dreiemomentet
+
+
 def calculate_omega_i(I, W_i, L):
     I_inv = np.linalg.inv(I)
     W_t = np.transpose(W_i)
     return I_inv @ W_t @ L
 
-def Euler(h, X_0, I, L):
-    W_i = [X_0]
-    for i in range(1, h):
-        # For all W-values after w0
-        omega_i = calculate_omega_i(I, W_i, L)
-        # Find Omega formel 18
-        Omega = np.matrix([[0, -omega_i[2], omega_i[1]],
-                        [omega_i[2], 0, -omega_i[0]],
-                        [-omega_i[1], omega_i[0], 0]])
-        # Calculate W_i+1
-        W_i.append(W_i[-1]*exp(h=h, Omega=Omega))
-    return W_i
+
+# def Euler(h, X_0, I, L):
+#     W_i = [X_0]
+#     for i in range(1, h):
+#         # For all W-values after w0
+#         omega_i = calculate_omega_i(I, W_i, L)
+#         # Find Omega formel 18
+#         Omega = np.matrix([[0, -omega_i[2], omega_i[1]],
+#                            [omega_i[2], 0, -omega_i[0]],
+#                            [-omega_i[1], omega_i[0], 0]])
+#         # Calculate W_i+1
+#         W_i.append(W_i[-1]*exp(h=h, Omega=Omega))
+#     return W_i
 
 def Euler(h, X_0, omega_i):
     W_i = [X_0]
     for i in range(1, h):
         # Find Omega formel 18
         Omega = np.matrix([[0, -omega_i[2], omega_i[1]],
-                        [omega_i[2], 0, -omega_i[0]],
-                        [-omega_i[1], omega_i[0], 0]])
+                           [omega_i[2], 0, -omega_i[0]],
+                           [-omega_i[1], omega_i[0], 0]])
         # Calculate W_i+1
-        W_i.append(W_i[-1]*exp(h=h, Omega=Omega))
+        W_i.append(np.matmul(W_i[-1], E(Omega, h)))
     return W_i
 
+
+def test():
+    indentity = np.identity(3)
+    L = np.array([1, 0, 0])
+    X = indentity
+    I = indentity
+    omega_i = omega(X, I, L)
+    dX_t = dX(X, omega_i)
+    X = integrate(dX_t, 2)
+    W = Euler(4, X, omega_i)
+    print(W)
+
+
+test()
