@@ -21,14 +21,14 @@ def I():
     return 0
 
 
-def E(Omega, h):
+def exp(Omega, h):
     I = np.identity(Omega.shape[0])
     omega = np.sqrt(Omega[0][1]**2+Omega[0][2]**2+Omega[1][2]**2)
     return I + (1-np.cos(omega*h))*(np.matmul(Omega, Omega)/(omega*omega)) + np.sin(omega*h)*(Omega/omega)
 
 
 h = 4
-print(np.matmul(E(Omega, h).transpose(), E(Omega, h)))
+print(np.matmul(exp(Omega, h).transpose(), exp(Omega, h)))
 
 """Oppgave 1b"""
 
@@ -74,6 +74,7 @@ Ixx = M_1*(R_1**2)/4 + M_1*(L_1**2)/12 + M_2*(R_2**2)/2
 
 Iyy = M_1*(R_1**2) + M_2*L_2/4 + M_1*(R_1**2) / \
     2 + M_2*(R_2**2)/4 + M_2*(L_2**2)/12
+<< << << < HEAD
 
 Izz = M_1*(R_1**2) + M_2*L_2/4 + M_1*(R_1**2)/4 + M_1 * \
     (L_1**2)/12 + M_2*(R_2**2)/4 + M_2*(L_2**2)/12
@@ -81,3 +82,14 @@ Izz = M_1*(R_1**2) + M_2*L_2/4 + M_1*(R_1**2)/4 + M_1 * \
 # print(Ixx)
 # print(Iyy)
 # print(Izz)
+== == == =
+
+Izz = M_1*(R_1**2) + M_2*L_2/4 + M_1*(R_1**2)/4 + M_1 * \
+    (L_1**2)/12 + M_2*(R_2**2)/4 + M_2*(L_2**2)/12
+
+
+if __name__ == "__main__":
+    print(Ixx)
+    print(Iyy)
+    print(Izz)
+>>>>>> > 183b18f35ab8070bfa5b717e22fb0351ef184c9d
