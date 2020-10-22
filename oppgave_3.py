@@ -1,7 +1,6 @@
 # Implementer varianten av Eulers metode gitt i likning (6) i avnsitt 4.1. Og test metoden p ̊a systemet som best ̊ar av likningene (3) og (4)._
 import numpy as np
-from oppgave_2 import omega, dX, integrate
-from oppgave_1 import E
+from oppgave_1 import exp
 # I er treghetsmoment, W_i resultatene og L er dreiemomentet
 
 
@@ -11,41 +10,27 @@ def calculate_omega_i(I, W_i, L):
     return I_inv @ W_t @ L
 
 
-# def Euler(h, X_0, I, L):
-#     W_i = [X_0]
-#     for i in range(1, h):
-#         # For all W-values after w0
-#         omega_i = calculate_omega_i(I, W_i, L)
-#         # Find Omega formel 18
-#         Omega = np.matrix([[0, -omega_i[2], omega_i[1]],
-#                            [omega_i[2], 0, -omega_i[0]],
-#                            [-omega_i[1], omega_i[0], 0]])
-#         # Calculate W_i+1
-#         W_i.append(W_i[-1]*exp(h=h, Omega=Omega))
-#     return W_i
-
-def Euler(h, X_0, omega_i):
+def Euler(h, X_0, I, L):
     W_i = [X_0]
     for i in range(1, h):
+        # For all W-values after w0
+        omega_i = calculate_omega_i(I, W_i[-1], L)
         # Find Omega formel 18
-        Omega = np.matrix([[0, -omega_i[2], omega_i[1]],
-                           [omega_i[2], 0, -omega_i[0]],
-                           [-omega_i[1], omega_i[0], 0]])
+        Omega = np.array([[0, -omega_i[2], omega_i[1]],
+                          [omega_i[2], 0, -omega_i[0]],
+                          [-omega_i[1], omega_i[0], 0]])
         # Calculate W_i+1
-        W_i.append(np.matmul(W_i[-1], E(Omega, h)))
+        W_i.append(np.matmul(W_i[-1], exp(Omega, 1/h)))
     return W_i
 
 
 def test():
-    indentity = np.identity(3)
     L = np.array([1, 0, 0])
-    X = indentity
+    indentity = np.identity(3)
+    X_0 = indentity
     I = indentity
-    omega_i = omega(X, I, L)
-    dX_t = dX(X, omega_i)
-    X = integrate(dX_t, 2)
-    W = Euler(4, X, omega_i)
-    print(W)
-
+    W = Euler(4, X_0, I, L)
+    for array in W:
+        print(array)
 
 test()
