@@ -12,10 +12,10 @@ from numpy import vectorize
 from scipy.integrate import quad
 from copy import deepcopy
 
-indentity = np.identity(3)
+identity = np.identity(3)
 L = np.array([1, 0, 0])
-X = indentity
-I = indentity
+X = identity
+I = identity
 
 def omega(X, I, L):
     return np.dot(np.linalg.inv((np.dot(X, I))), L)

@@ -11,33 +11,45 @@ from oppgave_1 import exp
 # Trenger:
 # Σ_i
 
-def litenSigmaTilStor(liten):
-    return np.array([[0, -liten[2], liten[1]], [liten[2], 0, -liten[0]], [-liten[1], liten[0], 0]])
+
+def liten_sigma_til_stor(liten):
+  return np.array([[0, -liten[2], liten[1]],
+                   [liten[2], 0, -liten[0]],
+                   [-liten[1], liten[0], 0]
+                   ])
 
 
 def rungeKutta(x0, W0, x, h):
-    # Count number of iterations using step size or
-    # step height h
-    n = (int)((x - x0)/h)
-    # Iterate for number of iterations
-    W = W0
+  # Count number of iterations using step size or
+  # step height h
+  n = (int)((x - x0)/h)
+  # Iterate for number of iterations
+  W = W0
 
-    I = np.array([[1,0,0],[0,1,0],[0,0,1]]) # need proper data
-    L = np.dot(I, [1,1,1]) # Need proper data
-    for i in range(1, n + 1):
-        "Apply Runge Kutta Formulas to find next value of y"
-        k1 = np.linalg.inv(I)*W.transpose()*L
-        k2 = np.linalg.inv(I)*exp(litenSigmaTilStor(k1),-h/2)*W.transpose()*L
-        k3 = np.linalg.inv(I)*exp(litenSigmaTilStor(k2), -h/2)*W.transpose()*L
-        k4 = np.linalg.inv(I)*exp(litenSigmaTilStor(k3), -h)*W.transpose()*L
+  treghetsmoment = np.array([[1, 0, 0],
+                             [0, 1, 0],
+                             [0, 0, 1]
+                            ]) # Need proper data
 
-        # Update next value of y
-        W = W*exp(litenSigmaTilStor(k1) + 2*litenSigmaTilStor(k2) + 2*litenSigmaTilStor(k3) + litenSigmaTilStor(k4), h/6)
+  dreiemoment = np.array([1, 0, 0])  # Need proper data
 
-        # Update next value of x
-        x0 = x0 + h
-    return W
+  treg_inv = np.linalg.inv(treghetsmoment)
+  W_trans = W.transpose()
+  for i in range(1, n + 1):
+      "Apply Runge Kutta Formulas to find next value of y"
+
+      k1 = np.matmul(np.matmul(treg_inv, W_trans), dreiemoment)
+      k2 = np.matmul(np.matmul(np.matmul(treg_inv, exp(liten_sigma_til_stor(k1),-h/2)),W_trans),dreiemoment)
+      k3 = np.matmul(np.matmul(np.matmul(treg_inv, exp(liten_sigma_til_stor(k2), -h / 2)), W_trans), dreiemoment)
+      k4 = np.matmul(np.matmul(np.matmul(treg_inv, exp(liten_sigma_til_stor(k3), -h)), W_trans), dreiemoment)
+
+      # Update next value of W
+      W = np.matmul(W, exp(liten_sigma_til_stor(k1) + 2*liten_sigma_til_stor(k2) +
+                2*liten_sigma_til_stor(k3) + liten_sigma_til_stor(k4),h/6))
+
+  return W
+
 
 if __name__ == "__main__":
-  testLiten = np.array([2, 3, 4])
-  print(litenSigmaTilStor(testLiten))
+    testLiten = np.array([2, 3, 4])
+    print(liten_sigma_til_stor(testLiten))
