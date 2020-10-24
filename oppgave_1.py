@@ -9,8 +9,8 @@ def exp(omega_matrise, h):
 
 
 def energi_rot(treghetsmoment, rotasjons_vektor):
-    dreiemoment = np.dot(treghetsmoment, rotasjons_vektor)
-    return (1 / 2) * np.dot(dreiemoment, rotasjons_vektor)
+    dreiemoment = np.matmul(treghetsmoment, rotasjons_vektor)
+    return (1 / 2) * np.matmul(dreiemoment, rotasjons_vektor)
 
 
 # Nøkkelens treghetsmoment I
