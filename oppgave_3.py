@@ -18,7 +18,7 @@ def Euler(h, X_0, I, L):
     W_i = X_0
     x_t = X_t(0)
     find_diff(0, x_t, W_i)
-    for i in range(1, int(1/h)):
+    for i in range(1, int(1/h)+1):
         # For all W-values after w0
         omega_i = calculate_omega_i(I, W_i, L)
         # Find Omega formel 18
