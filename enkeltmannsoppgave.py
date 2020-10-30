@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
-
 def Runge_Kutta_Fehlberg(func, yinit, x_range, h):
     m = len(yinit)
     n = int((x_range[-1] - x_range[0])/h)
@@ -59,6 +58,7 @@ def Runge_Kutta_Fehlberg(func, yinit, x_range, h):
 
     return [xsol, ysol]
 
+# Tar inn to funksjoner: diffligning og eksakt løsning. Tar så inn definisjonsmengde, y initiellverdi og steglengde.
 def estimate(func, func_exact, x, yinit, h):
   start = time.time()
   [ts, ys] = Runge_Kutta_Fehlberg(func, yinit, x, h)
@@ -81,8 +81,8 @@ def estimate(func, func_exact, x, yinit, h):
   plt.ylabel('y', fontsize=17)
   plt.tight_layout()
   plt.show()
-  #plt.savefig('Fig.png', dpi=600)
 
+# e^-2x - 2y
 def diff_func_1(x, y):
     dy = np.zeros((len(y)))
     dy[0] = np.exp(-2*x) - 2*y[0]
@@ -95,6 +95,7 @@ def diff_func_1_exact(dt, t):
       yexact.append(ye)
     return yexact
 
+# 2x - 4xy
 def diff_func_2(x, y):
     dy = np.zeros((len(y)))
     dy[0] = 2*x - 4*x*y
@@ -113,56 +114,10 @@ if __name__ == "__main__":
 
 from mpl_toolkits.mplot3d import Axes3D
 
-def Runge_Kutta_Fehlberg_Error_Tolerance(func, yinit, x_range, h):
-    m = len(yinit)
-    n = int((x_range[-1] - x_range[0])/h)
-    
-    x = x_range[0]
-    y = yinit
-    
-    xsol = np.empty(0)
-    xsol = np.append(xsol, x)
-
-    ysol = np.empty(0)
-    ysol = np.append(ysol, y)
-
-    for i in range(n):
-        k1 = func(x, y)
-
-        yp2 = y + k1*(h/5)
-
-        k2 = func(x+h/5, yp2)
-
-        yp3 = y + k1*(3*h/40) + k2*(9*h/40)
-
-        k3 = func(x+(3*h/10), yp3)
-
-        yp4 = y + k1*(3*h/10) - k2*(9*h/10) + k3*(6*h/5)
-
-        k4 = func(x+(3*h/5), yp4)
-
-        yp5 = y - k1*(11*h/54) + k2*(5*h/2) - k3*(70*h/27) + k4*(35*h/27)
-
-        k5 = func(x+h, yp5)
-
-        yp6 = y + k1*(1631*h/55296) + k2*(175*h/512) + k3*(575*h/13824) + k4*(44275*h/110592) + k5*(253*h/4096)
-
-        k6 = func(x+(7*h/8), yp6)
-
-        for j in range(m):
-            y[j] = y[j] + h*(37*k1[j]/378 + 250*k3[j]/621 + 125*k4[j]/594 + 512*k6[j]/1771)
-
-        x = x + h
-        xsol = np.append(xsol, x)
-
-        for r in range(m):
-            ysol = np.append(ysol, y[r]) 
-
-    return [xsol, ysol]
-
+# Estimerer uten nøyaktig løsning
 def estimate_without_exact(func, x, yinit, h):
   start = time.time()
-  [ts, ys] = Runge_Kutta_Fehlberg_Error_Tolerance(func, yinit, x, h)
+  [ts, ys] = Runge_Kutta_Fehlberg(func, yinit, x, h)
   end = time.time()
   print("Beregningstid: ", end - start, "sekunder")
   dt = int((x[-1]-x[0])/h)
@@ -187,6 +142,7 @@ def estimate_without_exact(func, x, yinit, h):
   ax = fig.add_subplot(111, projection='3d')
   ax.plot(y[0], y[1], y[2])
 
+# Lorenz ligningene
 def dydt(t, y_v):
   s = 10.
   r = 28.
@@ -206,6 +162,7 @@ y_0 = np.array([5., 5., 5.])
 
 estimate_without_exact(dydt, x, y_0, h)
 
+# Returnerer feil som en funksjon av tiden for en diffligning
 def error_computetime(func, func_exact, x, yinit, h):
   start = time.time()
   [ts, ys] = Runge_Kutta_Fehlberg(func, yinit, x, h)
@@ -217,7 +174,6 @@ def error_computetime(func, func_exact, x, yinit, h):
 
   y_diff = ys - yexact
   return [end - start, np.max(abs(y_diff))]
-  #plt.savefig('Fig.png', dpi=600)
 
 if __name__ == "__main__":
   h_start = 0.001
@@ -234,10 +190,8 @@ if __name__ == "__main__":
     result = error_computetime(diff_func_2, diff_func_2_exact, np.array([0.0, 2.0]), np.array([4.0]), i*steg_lengde + h_start)
     func2_time.append(result[0])
     func2_error.append(result[1])
-  
-print(func2_time)
-print(func2_error)
 
+# Plotter feil som en funskjon av tiden
 def plot_error_against_time(time, error):
   plt.plot(time, error, 'rs')
   plt.legend(["Feil og tid"], loc=1)
