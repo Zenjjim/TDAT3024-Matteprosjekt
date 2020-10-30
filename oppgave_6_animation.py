@@ -9,7 +9,7 @@ import matplotlib as mpl
 x0 = np.identity(3)
 treghetsmoment = treghetsmoment()
 
-rotasjonsvektor_a = np.array([0.05, 0 , 1])
+rotasjonsvektor_a = np.array([1 , 0, 0.05])
 dreiemoment_a = np.matmul(treghetsmoment, rotasjonsvektor_a)
 
 plots = []
@@ -36,6 +36,12 @@ quiver = ax.quiver(*get_arrow(0))
 ax.set_xlim(-2, 2)
 ax.set_ylim(-2, 2)
 ax.set_zlim(-2, 2)
+
+ax.set_xlabel ("X-akse")
+ax.set_ylabel ("Y-akse")
+ax.set_zlabel ("Z-akse")
+
+ax.set_title("[1, 0, 0.05]")
 
 def update(i):
     global quiver
