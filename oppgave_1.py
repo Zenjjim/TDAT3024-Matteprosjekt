@@ -9,7 +9,7 @@ def exp(omega_matrise, h):
 
 
 def energi_rot(treghetsmoment, rotasjons_vektor):
-    dreiemoment = np.matmul(treghetsmoment, rotasjons_vektor)
+    dreiemoment = np.dot(treghetsmoment, rotasjons_vektor)
     return (1 / 2) * np.matmul(dreiemoment, rotasjons_vektor)
 
 
@@ -28,13 +28,14 @@ def treghetsmoment():
     M_1 = math.pi * R_1 ** 2 * L_1 * 1000000 * p  # Håndtakets masse
     M_2 = math.pi * R_2 ** 2 * L_2 * 1000000 * p  # Sylinderens masse
 
-    Ixx = M_1 * (R_1 ** 2) / 4 + M_1 * (L_1 ** 2) / 12 + M_2 * (R_2 ** 2) / 2
+    Ixx = (M_1 * (R_1 ** 2) / 4) + (M_1 * (L_1 ** 2) / 12) + (M_2 * (R_2 ** 2) / 2)
 
-    Iyy = M_1 * (R_1 ** 2) + M_2 * L_2 / 4 + M_1 * (R_1 ** 2) / \
-          2 + M_2 * (R_2 ** 2) / 4 + M_2 * (L_2 ** 2) / 12
+    Iyy = (M_1 * (R_1 ** 2)) + (M_2 * L_2**2 / 4) + (M_1 * (R_1 ** 2) / \
+          2) + (M_2 * (R_2 ** 2) / 4) + (M_2 * (L_2 ** 2) / 12)
 
-    Izz = M_1 * (R_1 ** 2) + M_2 * L_2 / 4 + M_1 * (R_1 ** 2) / 4 + M_1 * \
-          (L_1 ** 2) / 12 + M_2 * (R_2 ** 2) / 4 + M_2 * (L_2 ** 2) / 12
+    Izz = (M_1 * (R_1 ** 2)) + (M_2 * L_2**2 / 4) + (M_1 * (R_1 ** 2) / 4) + (M_1 * \
+          (L_1 ** 2) / 12) + (M_2 * (R_2 ** 2) / 4) + (M_2 * (L_2 ** 2) / 12)
+
     return np.array([[Ixx, 0, 0],
                      [0, Iyy, 0],
                      [0, 0, Izz]

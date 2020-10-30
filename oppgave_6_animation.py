@@ -2,9 +2,9 @@ import matplotlib.pyplot as plt
 from oppgave_1 import treghetsmoment
 import numpy as np
 from oppgave_4 import rungeKutta
-
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.animation import FuncAnimation
+import matplotlib as mpl
 
 x0 = np.identity(3)
 treghetsmoment = treghetsmoment()
@@ -20,13 +20,8 @@ for k in range(30000):
     plots.append(x_i)
     x0 = x_i
 
-p0 = [0.799319, -3.477045e-01, 0.490093]
-p1 = [0.852512, 9.113778e-16, -0.522708]
-p2 = [0.296422, 9.376042e-01, 0.181748]
-
 
 fig, ax = plt.subplots(subplot_kw=dict(projection="3d"))
-
 
 def get_arrow(i):
     origin = [0, 0, 0]
@@ -42,7 +37,6 @@ ax.set_xlim(-2, 2)
 ax.set_ylim(-2, 2)
 ax.set_zlim(-2, 2)
 
-
 def update(i):
     global quiver
     quiver.remove()
@@ -51,5 +45,5 @@ def update(i):
 
 
 ani = FuncAnimation(fig, update, frames=np.linspace(
-    0, len(plots)-1, int((len(plots)-1)/60)), interval=50)
+    0, len(plots) - 1, int((len(plots) - 1) / 60)), interval=50)
 plt.show()
